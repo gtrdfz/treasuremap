@@ -2,8 +2,8 @@ package org.carbonit.box;
 
 public class Mountain extends ABox {
 
-    public Mountain(int horizontal, int vertical) {
-        super(horizontal, vertical);
+    public Mountain(Position position) {
+        super(position, false);
     }
 
     @Override
@@ -12,8 +12,8 @@ public class Mountain extends ABox {
     }
 
     @Override
-    protected boolean canGoOnIt() {
-        return false;
+    public String print() {
+        return String.format("M - %d - %d", getPosition().getHorizontal(), getPosition().getVertical());
     }
 
 }

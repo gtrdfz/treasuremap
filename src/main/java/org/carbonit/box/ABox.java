@@ -2,23 +2,20 @@ package org.carbonit.box;
 
 public abstract class ABox {
 
-    private final int horizontal;
-    private final int vertical;
+    private final Position position;
 
-    public ABox(int horizontal, int vertical) {
-        this.horizontal = horizontal;
-        this.vertical = vertical;
+    private final boolean canGoOnIt;
+
+    public ABox(Position position, boolean canGoOnIt) {
+        this.position = position;
+        this.canGoOnIt = canGoOnIt;
     }
 
     protected abstract int getReward();
 
-    protected abstract boolean canGoOnIt();
-
-    public int getHorizontal() {
-        return horizontal;
+    public Position getPosition() {
+        return position;
     }
 
-    public int getVertical() {
-        return vertical;
-    }
+    public abstract String print();
 }

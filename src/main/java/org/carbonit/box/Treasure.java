@@ -4,8 +4,8 @@ public class Treasure extends ABox {
 
     private int nb;
 
-    public Treasure(int horizontal, int vertical, int nb) {
-        super(horizontal, vertical);
+    public Treasure(Position position, int nb) {
+        super(position, true);
         this.nb = nb;
     }
 
@@ -23,7 +23,7 @@ public class Treasure extends ABox {
     }
 
     @Override
-    protected boolean canGoOnIt() {
-        return true;
+    public String print() {
+        return String.format("T - %d - %d - %d", getPosition().getHorizontal(), getPosition().getVertical(), nb);
     }
 }
