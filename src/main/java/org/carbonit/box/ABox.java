@@ -11,11 +11,17 @@ public abstract class ABox {
         this.canGoOnIt = canGoOnIt;
     }
 
-    protected abstract int getReward();
+    public abstract int getReward();
 
     public Position getPosition() {
         return position;
     }
 
+    public boolean isCanGoOnIt() {
+        return canGoOnIt;
+    }
+
     public abstract String print();
+
+    public abstract boolean canBeDelete();
 }

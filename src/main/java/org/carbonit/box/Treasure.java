@@ -18,12 +18,17 @@ public class Treasure extends ABox {
     }
 
     @Override
-    protected int getReward() {
+    public int getReward() {
         return GetOneTreasure();
     }
 
     @Override
     public String print() {
         return String.format("T - %d - %d - %d", getPosition().getHorizontal(), getPosition().getVertical(), nb);
+    }
+
+    @Override
+    public boolean canBeDelete() {
+        return nb <= 0;
     }
 }

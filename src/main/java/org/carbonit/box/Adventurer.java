@@ -8,9 +8,10 @@ import java.util.List;
 public class Adventurer {
 
     private final String name;
-    private final int nbTreasure;
     private final List<EMovement> eMovementList = new ArrayList<>();
+    private int nbTreasure;
     private Position position;
+    private Position nextPosition;
     private EOrientation eOrientation;
 
     public Adventurer(Position position, String name, EOrientation eOrientation, String movements) throws Exception {
@@ -19,6 +20,14 @@ public class Adventurer {
         this.eOrientation = eOrientation;
         this.nbTreasure = 0;
         checkRegexMovements(movements);
+    }
+
+    public Position getNextPosition() {
+        return nextPosition;
+    }
+
+    public void setNextPosition(Position nextPosition) {
+        this.nextPosition = nextPosition;
     }
 
     private void checkRegexMovements(String movements) throws Exception {
@@ -34,6 +43,10 @@ public class Adventurer {
 
     public Position getPosition() {
         return position;
+    }
+
+    public void addTreseare(int nb) {
+        this.nbTreasure += nb;
     }
 
     public List<EMovement> geteMovementList() {
@@ -68,6 +81,11 @@ public class Adventurer {
         return position;
     }
 
+    public void cancelMovement() {
+        if (eMovementList.size() > 0)
+            this.eMovementList.remove(0);
+    }
+
     private Position getNewPositionIfWalk() {
         return new Position(position.getHorizontal() + eOrientation.horizontal, position.getVertical() + eOrientation.vertical);
     }
@@ -76,9 +94,8 @@ public class Adventurer {
         return eOrientation;
     }
 
-
     public String print() {
-        return String.format("A - %s - %d - %d - %d", this.name, getPosition().getHorizontal(), getPosition().getVertical(), this.eOrientation.toString(), this.nbTreasure);
+        return String.format("A - %s - %d - %d - %s - %d", this.name, getPosition().getHorizontal(), getPosition().getVertical(), this.eOrientation.toString(), this.nbTreasure);
     }
 
 }
