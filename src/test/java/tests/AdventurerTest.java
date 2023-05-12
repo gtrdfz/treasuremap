@@ -53,7 +53,7 @@ public class AdventurerTest {
         Position position = new Position(1, 1);
         Adventurer adv = new Adventurer(position, UUID.randomUUID().toString(), EOrientation.E, "g");
         // act
-        Position newPosition = adv.getNextCaseWithoutChangePosition();
+        Position newPosition = adv.calculateTheoreticalNextPosition();
         // assert
         Assertions.assertEquals(position, newPosition);
     }
@@ -64,7 +64,7 @@ public class AdventurerTest {
         Position position = new Position(1, 1);
         Adventurer adv = new Adventurer(position, UUID.randomUUID().toString(), EOrientation.E, "d");
         // act
-        Position newPosition = adv.getNextCaseWithoutChangePosition();
+        Position newPosition = adv.calculateTheoreticalNextPosition();
         // assert
         Assertions.assertEquals(position, newPosition);
     }
@@ -72,16 +72,16 @@ public class AdventurerTest {
     @Test
     public void AdventureWalkTest() throws Exception {
         Adventurer adv = new Adventurer(new Position(1, 1), UUID.randomUUID().toString(), EOrientation.S, "a");
-        Assertions.assertEquals(new Position(1, 2), adv.getNextCaseWithoutChangePosition());
+        Assertions.assertEquals(new Position(1, 2), adv.calculateTheoreticalNextPosition());
 
         adv = new Adventurer(new Position(1, 1), UUID.randomUUID().toString(), EOrientation.N, "a");
-        Assertions.assertEquals(new Position(1, 0), adv.getNextCaseWithoutChangePosition());
+        Assertions.assertEquals(new Position(1, 0), adv.calculateTheoreticalNextPosition());
 
         adv = new Adventurer(new Position(1, 1), UUID.randomUUID().toString(), EOrientation.E, "a");
-        Assertions.assertEquals(new Position(2, 1), adv.getNextCaseWithoutChangePosition());
+        Assertions.assertEquals(new Position(2, 1), adv.calculateTheoreticalNextPosition());
 
         adv = new Adventurer(new Position(1, 1), UUID.randomUUID().toString(), EOrientation.O, "a");
-        Assertions.assertEquals(new Position(0, 1), adv.getNextCaseWithoutChangePosition());
+        Assertions.assertEquals(new Position(0, 1), adv.calculateTheoreticalNextPosition());
     }
 
 

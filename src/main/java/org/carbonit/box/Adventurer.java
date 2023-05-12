@@ -66,24 +66,21 @@ public class Adventurer {
         else if (movement == EMovement.G)
             eOrientation = orientations[Math.abs((orientationLength + currentOrientationOrdinal - 1) % orientationLength)];
         else if (movement == EMovement.A)
-            this.position = getNewPositionIfWalk();
+            this.position = getNextPosition();
         else
             Logger.error("Movement not implemented:" + movement.name());
     }
 
-    public Position getNextCaseWithoutChangePosition() {
+    public Position calculateTheoreticalNextPosition() {
+        Position newPosition = position;
         if (eMovementList.size() > 0) {
             EMovement eMovement = eMovementList.get(0);
             if (eMovement == EMovement.A) {
-                return getNewPositionIfWalk();
+                newPosition = getNewPositionIfWalk();
             }
         }
-        return position;
-    }
-
-    public void cancelMovement() {
-        if (eMovementList.size() > 0)
-            this.eMovementList.remove(0);
+        nextPosition = newPosition;
+        return nextPosition;
     }
 
     private Position getNewPositionIfWalk() {

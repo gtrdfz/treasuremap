@@ -42,78 +42,65 @@ public final class Game {
             Logger.info("Round n°" + i);
             // set all next position
             for (Adventurer adventurer : adventurerList) {
-                adventurer.setNextPosition(getNextPosition(adventurer));
+                setRealNextPosition(adventurer);
             }
             // check conflict before moves
-            for (Adventurer adventurer : adventurerList) {
-                if (checkConflict(adventurer, null))
-                    if (adventurer.getNextPosition().equals(adventurer.getPosition()))
-                        executeNextMove(adventurer);
-                    else
-                        adventurer.cancelMovement();
-                else
-                    executeNextMove(adventurer);
+            manageConflicts();
 
-                adventurer.setNextPosition(adventurer.getPosition());
+            for (Adventurer adventurer : adventurerList) {
+                executeNextMove(adventurer);
+            }
+
+        }
+    }
+
+    private void manageConflicts() {
+        for (Adventurer a : adventurerList) {
+            for (Adventurer b : adventurerList) {
+                if (!a.equals(b) && a.getNextPosition().equals(b.getNextPosition())) {
+                    b.setNextPosition(b.getPosition());
+                    manageConflicts();
+                }
             }
         }
     }
 
-    private boolean checkConflict(Adventurer adventurer, List<Adventurer> adList) {
-        for (Adventurer ad : adList) {
-            if (adventurer.getNextPosition().equals(ad.getNextPosition()) || adventurer.getNextPosition().equals(ad.getPosition()))
-                return checkConflict(ad, adList.subList(adList.indexOf(ad) + 1, adList.size()));
-        }
-        return false;
-    }
-
-    private Position getNextPosition(Adventurer adventurer) {
-        Position newPosition = adventurer.getNextCaseWithoutChangePosition();
-        // position it out of the map
-        if (!isInMap(newPosition)) {
-            return adventurer.getPosition();
-        }
-        // position not change
-        if (newPosition.equals(adventurer.getPosition())) {
-            return newPosition;
-        }
-        // check if position can be change, and get rewards
-        if (positionABoxHashMap.containsKey(newPosition)) {
-            ABox box = positionABoxHashMap.get(newPosition);
-            if (!box.isCanGoOnIt())
-                return adventurer.getPosition();
-        }
-        return newPosition;
-    }
-
-    private void executeNextMove(Adventurer adventurer) {
+    private void setRealNextPosition(Adventurer adventurer) {
+        adventurer.calculateTheoreticalNextPosition();
         // position it out of the map
         if (!isInMap(adventurer.getNextPosition())) {
-            Logger.error("Impossible situation");
+            adventurer.setNextPosition(adventurer.getPosition());
             return;
         }
         // check if position can be change, and get rewards
         if (positionABoxHashMap.containsKey(adventurer.getNextPosition())) {
             ABox box = positionABoxHashMap.get(adventurer.getNextPosition());
+            if (!box.isCanGoOnIt()) {
+                adventurer.setNextPosition(adventurer.getPosition());
+            }
+        }
+    }
+
+    private void executeNextMove(Adventurer adventurer) {
+        // check if position can be change, and get rewards
+        if (positionABoxHashMap.containsKey(adventurer.getNextPosition())) {
+            ABox box = positionABoxHashMap.get(adventurer.getNextPosition());
             if (box.isCanGoOnIt()) {
                 adventurer.addTreseare(box.getReward());
-                if (box.canBeDelete()) positionABoxHashMap.remove(adventurer.getNextPosition());
-            } else {
-                Logger.error("Impossible situation");
-                return;
+                if (box.canBeDelete())
+                    positionABoxHashMap.remove(adventurer.getNextPosition());
             }
         }
         adventurer.applyMovement();
     }
 
     private boolean isInMap(Position newPosition) {
-        return newPosition.getHorizontal() > 0 && newPosition.getHorizontal() <= this.width && newPosition.getVertical() > 0 && newPosition.getVertical() <= this.height;
+        return newPosition.getHorizontal() >= 0 && newPosition.getHorizontal() <= this.width && newPosition.getVertical() >= 0 && newPosition.getVertical() <= this.height;
     }
-
 
     public String print() {
         StringBuilder output = new StringBuilder();
-        output.append("\n");
+        output.append(String.format("C - %d - %d\n", width, height));
         for (ABox b : this.positionABoxHashMap.values())
             output.append(b.print()).append("\n");
         for (Adventurer a : this.adventurerList)

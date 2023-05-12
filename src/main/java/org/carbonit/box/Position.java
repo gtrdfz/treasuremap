@@ -4,34 +4,20 @@ import java.util.Objects;
 
 public class Position {
 
-    private int horizontal;
-    private int vertical;
+    private final int horizontal;
+    private final int vertical;
 
     public Position(int horizontal, int vertical) {
         this.horizontal = horizontal;
         this.vertical = vertical;
     }
 
-
-    public void move(int horizontal, int vertical) {
-        this.horizontal += horizontal;
-        this.vertical += vertical;
-    }
-
     public int getHorizontal() {
         return horizontal;
     }
 
-    public void setHorizontal(int horizontal) {
-        this.horizontal = horizontal;
-    }
-
     public int getVertical() {
         return vertical;
-    }
-
-    public void setVertical(int vertical) {
-        this.vertical = vertical;
     }
 
     @Override
