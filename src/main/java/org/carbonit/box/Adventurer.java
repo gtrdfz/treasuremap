@@ -53,6 +53,9 @@ public class Adventurer {
         return eMovementList;
     }
 
+    /**
+     * Apply the next movement for this {@link Adventurer}.
+     */
     public void applyMovement() {
         if (eMovementList.size() == 0)
             return;
@@ -95,4 +98,7 @@ public class Adventurer {
         return String.format("A - %s - %d - %d - %s - %d", this.name, getPosition().getHorizontal(), getPosition().getVertical(), this.eOrientation.toString(), this.nbTreasure);
     }
 
+    public String getName() {
+        return name;
+    }
 }

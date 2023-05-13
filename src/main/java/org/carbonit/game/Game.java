@@ -30,30 +30,42 @@ public final class Game {
             positionABoxHashMap.put(box.getPosition(), box);
     }
 
-    public void addAdventurer(Adventurer adventurer) {
-        if (adventurer.getPosition().getHorizontal() > height || adventurer.getPosition().getVertical() > width)
-            Logger.error("One element is out of the map: " + adventurer.getPosition().toString());
+    public void addAdventurer(Adventurer adventurer) throws Exception {
+        if (adventurer.getPosition().getHorizontal() >= width ||
+                adventurer.getPosition().getHorizontal() < 0 ||
+                adventurer.getPosition().getVertical() >= height ||
+                adventurer.getPosition().getVertical() < 0)
+            throw new Exception("One adventurer is out of the map: " + adventurer.getName() + " " + adventurer.getPosition().toString());
         adventurerList.add(adventurer);
     }
 
+
+    /**
+     * Start game
+     */
     public void start() {
         int i = 0;
+        //
         while (adventurerList.stream().anyMatch(x -> x.geteMovementList().size() > 0)) {
             Logger.info("Round n°" + i);
             // set all next position
-            for (Adventurer adventurer : adventurerList) {
+            for (Adventurer adventurer : adventurerList)
                 setRealNextPosition(adventurer);
-            }
+
             // check conflict before moves
             manageConflicts();
 
-            for (Adventurer adventurer : adventurerList) {
+            // execute moves
+            for (Adventurer adventurer : adventurerList)
                 executeNextMove(adventurer);
-            }
 
         }
     }
 
+    /**
+     * Resolve conflicts if 2 adventurer must go on the same box.
+     * The 1st Adventurer in the list "win" the conflict
+     */
     private void manageConflicts() {
         for (Adventurer a : adventurerList) {
             for (Adventurer b : adventurerList) {
@@ -65,6 +77,11 @@ public final class Game {
         }
     }
 
+    /**
+     * Calculate next position of adventurer and set in {@link Adventurer#setNextPosition(Position)}
+     *
+     * @param adventurer
+     */
     private void setRealNextPosition(Adventurer adventurer) {
         adventurer.calculateTheoreticalNextPosition();
         // position it out of the map
@@ -72,7 +89,7 @@ public final class Game {
             adventurer.setNextPosition(adventurer.getPosition());
             return;
         }
-        // check if position can be change, and get rewards
+        // check if new position is possible
         if (positionABoxHashMap.containsKey(adventurer.getNextPosition())) {
             ABox box = positionABoxHashMap.get(adventurer.getNextPosition());
             if (!box.isCanGoOnIt()) {
@@ -85,7 +102,7 @@ public final class Game {
         // check if position can be change, and get rewards
         if (positionABoxHashMap.containsKey(adventurer.getNextPosition())) {
             ABox box = positionABoxHashMap.get(adventurer.getNextPosition());
-            if (box.isCanGoOnIt()) {
+            if (box.isCanGoOnIt() && !adventurer.getPosition().equals(adventurer.getNextPosition())) {
                 adventurer.addTreseare(box.getReward());
                 if (box.canBeDelete())
                     positionABoxHashMap.remove(adventurer.getNextPosition());
@@ -95,7 +112,7 @@ public final class Game {
     }
 
     private boolean isInMap(Position newPosition) {
-        return newPosition.getHorizontal() >= 0 && newPosition.getHorizontal() <= this.width && newPosition.getVertical() >= 0 && newPosition.getVertical() <= this.height;
+        return newPosition.getHorizontal() >= 0 && newPosition.getHorizontal() < this.width && newPosition.getVertical() >= 0 && newPosition.getVertical() < this.height;
     }
 
     public String print() {

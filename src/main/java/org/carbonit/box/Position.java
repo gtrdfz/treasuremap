@@ -33,4 +33,11 @@ public class Position {
         return Objects.hash(horizontal, vertical);
     }
 
+    @Override
+    public String toString() {
+        return "Position{" +
+                "horizontal=" + horizontal +
+                ", vertical=" + vertical +
+                '}';
+    }
 }

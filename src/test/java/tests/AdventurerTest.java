@@ -84,5 +84,11 @@ public class AdventurerTest {
         Assertions.assertEquals(new Position(0, 1), adv.calculateTheoreticalNextPosition());
     }
 
+    @Test
+    public void AdventureMovementNotValidTest() {
+        Assertions.assertThrows(Exception.class, () -> {
+            new Adventurer(new Position(1, 1), UUID.randomUUID().toString(), EOrientation.S, "f");
+        });
+    }
 
 }
