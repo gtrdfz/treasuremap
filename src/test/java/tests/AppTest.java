@@ -34,10 +34,12 @@ public class AppTest {
                 "A - 2n - 2 - 0 - E - 1\n";
 
 
-        String fileResultContent = Files.readString(Path.of(filepath.toString().replace(".txt", "_result.txt")));
+        String newFileName = "result_" + filepath.getFileName();
+        Path newFilePath = filepath.getParent().resolve(Path.of(newFileName));
+        String fileResultContent = Files.readString(newFilePath);
         Assertions.assertEquals(res, fileResultContent);
         Files.delete(filepath);
-        Files.delete(Path.of(fileResultContent));
+        Files.delete(newFilePath);
     }
 
 

@@ -47,7 +47,7 @@ public final class Game {
         int i = 0;
         //
         while (adventurerList.stream().anyMatch(x -> x.geteMovementList().size() > 0)) {
-            Logger.info("Round n°" + i);
+            Logger.info("Round n°" + i++);
             // set all next position
             for (Adventurer adventurer : adventurerList)
                 setRealNextPosition(adventurer);

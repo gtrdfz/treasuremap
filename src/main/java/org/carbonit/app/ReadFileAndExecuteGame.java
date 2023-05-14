@@ -2,6 +2,7 @@ package org.carbonit.app;
 
 import org.carbonit.box.*;
 import org.carbonit.game.Game;
+import org.tinylog.Logger;
 
 import java.io.File;
 import java.nio.file.Files;
@@ -41,9 +42,10 @@ public class ReadFileAndExecuteGame {
 
         game.start();
 
-        String newFileName = "result_"+file.getFileName();
-        //Files.writeString(file.getParent().resolve(Path.of(newFileName))).
-
+        String newFileName = "result_" + file.getFileName();
+        Path newFilePath = file.getParent().resolve(Path.of(newFileName));
+        Files.writeString(newFilePath, game.print());
+        Logger.info("Result: " + newFilePath);
     }
 
     private Game createGame(String line) throws Exception {
